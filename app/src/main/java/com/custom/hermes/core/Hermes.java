@@ -61,11 +61,13 @@ public class Hermes {
         typeCenter.register(clazz);
     }
 
+    // TODO: Create by Ysw 2020/2/8 这个方法还需要再深入理解
     public <T> T getInstance(Class<T> clazz, Object... parameters) {
         HermesResponse response = sendRequest(HermesService.class, clazz, null, parameters);
         return getProxy(HermesService.class, clazz);
     }
 
+    // TODO: Create by Ysw 2020/2/8 这个动态代理也需要再深入理解
     private <T> T getProxy(Class<? extends HermesService> service, Class<T> clazz) {
         ClassLoader classLoader = service.getClassLoader();
         T proxy = (T) Proxy.newProxyInstance(classLoader, new Class[]{clazz}, new HermesInvocationHandler(service, clazz));

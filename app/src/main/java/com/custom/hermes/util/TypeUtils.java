@@ -64,7 +64,6 @@ public class TypeUtils {
         if (length == 0) {
             return buffer.toString();
         }
-        buffer.append(getClassName(classes[0]));
         for (int i = 0; i < length; i++) {
             buffer.append(",").append(getClassName(classes[i]));
         }

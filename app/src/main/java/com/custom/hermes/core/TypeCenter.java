@@ -34,7 +34,7 @@ public class TypeCenter {
         return singleton;
     }
 
-    public void register(Class<?> clazz) {
+    void register(Class<?> clazz) {
         registerClass(clazz);
         registerMethod(clazz);
     }
@@ -50,16 +50,21 @@ public class TypeCenter {
             mRawMethods.putIfAbsent(clazz, new ConcurrentHashMap<String, Method>());
             ConcurrentHashMap<String, Method> map = mRawMethods.get(clazz);
             String key = TypeUtils.getMethodId(method);
-            map.put(key, method);
+            if (map != null) {
+                map.put(key, method);
+            }
         }
     }
 
-    public Method getMethod(Class<?> clazz, RequestBean requestBean) {
+    Method getMethod(Class<?> clazz, RequestBean requestBean) {
         String name = requestBean.getMethodName();
         if (name != null) {
             mRawMethods.putIfAbsent(clazz, new ConcurrentHashMap<String, Method>());
             ConcurrentHashMap<String, Method> map = mRawMethods.get(clazz);
-            Method method = map.get(name);
+            Method method = null;
+            if (map != null) {
+                method = map.get(name);
+            }
             if (method != null) {
                 return method;
             }
@@ -73,13 +78,15 @@ public class TypeCenter {
                 }
             }
             method = TypeUtils.getMethod(clazz, name.substring(0, pos), parameters);
-            map.put(name, method);
+            if (map != null) {
+                map.put(name, method);
+            }
             return method;
         }
         return null;
     }
 
-    public Class getClassType(String name) {
+    Class getClassType(String name) {
         if (TextUtils.isEmpty(name)) {
             return null;
         }
